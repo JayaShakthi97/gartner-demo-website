@@ -72,6 +72,15 @@ input, select, textarea {
 	appearance: none;
 }
 
+.title-logo {
+	display: inline-flex !important;
+}
+
+.title-logo > img {
+	width: 60px;
+	margin-right: 8px;
+}
+
 /* Basic */
 
 	@-ms-viewport {
