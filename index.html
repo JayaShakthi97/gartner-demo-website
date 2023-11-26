@@ -150,7 +150,7 @@
 						<div class="inner">
 							<section>
 								<h2>Contact Us</h2>
-								<form method="post" action="contact.php">
+								<form id="contactForm" method="post">
 									<div class="fields">
 										<div class="field half">
 											<label for="name">Name</label>
@@ -166,7 +166,11 @@
 										</div>
 									</div>
 									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li>
+											<button id="submit-button" type="submit" class="primary">
+												Send Message
+											</button>
+										</li>
 									</ul>
 								</form>
 							</section>
@@ -190,6 +194,96 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+				function submitContactForm() {
+					var submitButton = document.getElementById('submit-button');
+					submitButton.innerHTML = '<span class="loading-spinner"></span> Sending...';
+					submitButton.disabled = true;
 
+					// Get form data
+					var name = document.getElementById('name').value;
+					var email = document.getElementById('email').value;
+					var message = document.getElementById('message').value;
+	
+					// Basic Validation
+					if (!validateForm(name, email, message)) {
+						return false; // Stop the function if validation fails
+					}
+	
+					// Create payload
+					var payload = {
+						emailSubject: "[Pet Care Website] New Contact Us Inquiry",
+						emailType: "Marketing Lead",
+						properties: [
+							{ name: "name", value: name },
+							{ name: "email", value: email },
+							{ name: "message", value: message }
+						],
+						receipient: "jayashakthigaming@gmail.com"
+					};
+	
+					// Create XHR object
+					var xhr = new XMLHttpRequest();
+					xhr.open("POST", "https://aff14739-f3f9-4d91-90da-a984bc21d84f-prod.e1-us-east-azure.choreoapis.dev/ekgh/emailservice/email-service-803/v1.0/messages", true);
+					xhr.setRequestHeader("Content-Type", "application/json");
+	
+					// Handle response
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState === 4 && xhr.status === 200) {
+							// Handle successful submission
+							console.log("Form submitted successfully.");
+							// alert("Thank you for your message!");
+
+							// Clear the form
+							document.getElementById('name').value = '';
+							document.getElementById('email').value = '';
+							document.getElementById('message').value = '';
+						} else if (xhr.readyState === 4) {
+							// Handle error
+							console.error("Error in form submission.");
+							alert("There was a problem submitting your form. Please try again.");
+						}
+
+						// Reset button state
+						submitButton.innerHTML = 'Message Sent!';
+						
+						setTimeout(function () {
+							submitButton.innerHTML = 'Send Message';
+							submitButton.disabled = false;
+						}, 2000);
+					};
+	
+					// Send request
+					xhr.send(JSON.stringify(payload));
+				}
+	
+				// Basic form validation function
+				function validateForm(name, email, message) {
+					if (name.trim() === '') {
+						alert("Please enter your name.");
+						return false;
+					}
+					if (email.trim() === '') {
+						alert("Please enter your email.");
+						return false;
+					}
+					if (!email.includes('@')) {
+						alert("Please enter a valid email address.");
+						return false;
+					}
+					if (message.trim() === '') {
+						alert("Please enter a message.");
+						return false;
+					}
+					return true;
+				}
+	
+			</script>
+			<script>
+				document.getElementById('contactForm').addEventListener('submit', function(event) {
+					event.preventDefault(); // Prevents the default form submission
+					submitContactForm();
+				});
+			</script>
 	</body>
 </html>

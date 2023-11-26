@@ -81,6 +81,21 @@ input, select, textarea {
 	margin-right: 8px;
 }
 
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spinner .6s linear infinite;
+	margin-top: 0.7em;
+}
+
 /* Basic */
 
 	@-ms-viewport {
